@@ -6,22 +6,72 @@
 
 # .vscode
 .vscode/
+
 # Visual Studio
 .vs/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+*.csproj.user
+*.dbmdl
+*.jfm
 
 # NuGet
 *.nupkg
 **/packages/*
 !**/packages/build/
+project.lock.json
 
-# Rider
+# Rider / JetBrains
 .idea/
+*.sln.iml
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python tools
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+*.cover
+
+# Jupyter
+.ipynb_checkpoints/
 
 # OS
 Thumbs.db
 Desktop.ini
 .DS_Store
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
