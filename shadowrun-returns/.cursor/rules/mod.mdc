@@ -1,6 +1,6 @@
 ---
 description: Shadowrun Returns BepInEx mod architecture, game types, and investigation findings
-globs: shadowrun-returns/mod/**
+globs: mod/**
 alwaysApply: false
 ---
 

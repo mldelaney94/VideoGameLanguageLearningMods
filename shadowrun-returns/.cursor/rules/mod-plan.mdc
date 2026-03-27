@@ -1,6 +1,6 @@
 ---
 description: Next feature plan for Shadowrun Returns mod — word selection, highlight, dictionary popup
-globs: shadowrun-returns/mod/**
+globs: mod/**
 alwaysApply: false
 ---
 

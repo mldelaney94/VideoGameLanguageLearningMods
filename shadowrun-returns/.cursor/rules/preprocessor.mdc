@@ -1,6 +1,6 @@
 ---
 description: Shadowrun Returns Python preprocessor for Chinese .po file processing
-globs: shadowrun-returns/preprocessor/**
+globs: preprocessor/**
 alwaysApply: false
 ---
 
