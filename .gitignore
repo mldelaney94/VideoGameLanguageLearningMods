@@ -4,6 +4,9 @@
 [Dd]ebug/
 [Rr]elease/
 
+# .vscode
+.vscode/*
+
 # Visual Studio
 .vs/
 *.user
