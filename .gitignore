@@ -5,8 +5,7 @@
 [Rr]elease/
 
 # .vscode
-.vscode/*
-
+.vscode/
 # Visual Studio
 .vs/
 *.user
