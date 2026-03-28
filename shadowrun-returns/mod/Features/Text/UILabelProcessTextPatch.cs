@@ -38,8 +38,10 @@ namespace ShadowrunReturnsLanguageEngage
       return chinese + " " + pinyin;
     }
 
-    // Emote lines are wrapped in a single {{EFD27B}}...{{-}} color pair.
-    // Split them into individually colored bracket-delimited lines.
+    // Emote lines erroneously look like so: {{EFD27B}}chinese\n\npinyin{{-}}.
+    // This cannot be fixed in preprocessing because the game sometimes injects
+    // the colours at runtime.
+    // Split them into individually colored bracket-delimited lines
     private static string FormatTextLabel(string text)
     {
       bool isSingleColorEmote =

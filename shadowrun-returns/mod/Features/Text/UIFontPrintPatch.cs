@@ -21,12 +21,12 @@ namespace ShadowrunReturnsLanguageEngage
         bool encoding
       )
     {
-      Globals.printedGlyphVerts = verts;
-      Globals.printSourceText = text;
-      Globals.glyphToStringIndex = BuildIndexMap(text, encoding);
+      Globals.speakerQuads = verts;
+      Globals.speakerText = text;
+      Globals.speakerQuadToIndexMap = BuildIndexMap(text, encoding);
 
       int expectedQuadCount = verts.size / 4;
-      int mappedCount = Globals.glyphToStringIndex.Count;
+      int mappedCount = Globals.speakerQuadToIndexMap.Count;
 
       if (mappedCount != expectedQuadCount)
       {
@@ -51,6 +51,7 @@ namespace ShadowrunReturnsLanguageEngage
         if (c == ' ') continue;
         if (c == '\u200B') continue;
 
+        // skip {{.*}}'s
         if (encoding && c == '{' && i + 1 < length && text[i + 1] == '{'
             && (i == 0 || text[i - 1] != '\\'))
         {
