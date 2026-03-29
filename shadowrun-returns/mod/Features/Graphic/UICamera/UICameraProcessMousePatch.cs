@@ -11,10 +11,13 @@ namespace ShadowrunReturnsLanguageEngage
   internal static class UICameraProcessMousePatch
   {
     private static string lastWord = "";
+    // the textlabels themselves don't have colliders, instead we collide with something thats on top
+    // of them, and then walk the stack of neighbours to find them
     private static readonly HashSet<string> collisionNamesToCheck = 
       [
         "ConversationDragContents",
         "ConversationResponse(Clone)",
+        "ResponseDragPanelTop",
         "ObjectivesDragPanelContents"
       ];
 

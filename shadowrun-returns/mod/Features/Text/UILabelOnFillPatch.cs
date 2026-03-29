@@ -10,6 +10,7 @@ namespace ShadowrunReturnsLanguageEngage
   [HarmonyPatch(typeof(UILabel), nameof(UILabel.OnFill))]
   internal static class UILabelOnFillPatch
   {
+    // tried to add the level loading text, but it has no collider
     private static readonly Dictionary<string, Func<string, string>> Actions = new()
     {
       { "NameLabel", FormatNameLabel },
@@ -32,7 +33,6 @@ namespace ShadowrunReturnsLanguageEngage
     private static void Postfix()
     {
       Globals.currentRenderingLabel = null;
-      CleanupStaleLabels();
     }
 
     private static string Noop(string text)
@@ -70,22 +70,6 @@ namespace ShadowrunReturnsLanguageEngage
         return string.Join("]{{-}}\n\n{{EFD27B}}[", text.Split('\n'));
 
       return text;
-    }
-
-    private static void CleanupStaleLabels()
-    {
-      List<UILabel> stales = [];
-      foreach (var kvp in Globals.LabelRegistry)
-      {
-        if (kvp.Key.transform == null)
-        {
-          stales.Add(kvp.Key);
-        }
-      }
-      foreach (var label in stales)
-      {
-        Globals.LabelRegistry.Remove(label);
-      }
     }
   }
 }

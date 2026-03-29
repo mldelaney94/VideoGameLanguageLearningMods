@@ -12,10 +12,6 @@ BepInEx mod for Shadowrun Returns (Unity 4.2.0f4). Hooks into NGUI text renderin
 
 BepInEx 6.0.0-be.754, HarmonyX 2.10.2, Unity 4.2.0f4, .NET 3.5, Assembly-CSharp.dll (game types).
 
-## Entry Point
-
-`ShadowrunreturnsLanguageEngage` inherits `BaseUnityPlugin`. `Awake()` creates HarmonyX instance (`"matthewdelaney.ShadowRunReturnsLanguageEngage"`) and calls `PatchAll()`. Static `Log` property (`ManualLogSource`) for logging.
-
 ## Conventions
 
 - Namespace: `ShadowrunReturnsLanguageEngage`
@@ -24,17 +20,34 @@ BepInEx 6.0.0-be.754, HarmonyX 2.10.2, Unity 4.2.0f4, .NET 3.5, Assembly-CSharp.
 
 ## Game Types
 
-- `UIFont` — NGUI font renderer. `Print()` populates `BetterList<Vector3>` (verts) and `BetterList<Color>` (colors) by ref.
-- `UIPopupList` — NGUI popup component.
-- `BetterList<T>` — NGUI lightweight generic list. Use `.size` for count.
+- `UIFont` — NGUI font renderer. `Print()` fills `BetterList<Vector3>` verts and `BetterList<Color>` cols by ref. Multiple UILabels share one UIFont instance.
+- `UIWidget` — base of `UILabel`. Has `pivotOffset`, `relativeSize` (Vector2s). No `worldCorners` in this NGUI version. All conversation labels use TopLeft pivot (0,0).
+- `BetterList<T>` — NGUI list. Use `.size` for count.
+
+## Architecture: Label Registry
+
+`Dictionary<UILabel, LabelDataObject>` in `Globals.LabelRegistry`. Bridged via ambient variable:
+
+1. `OnFill.Prefix` → `Globals.currentRenderingLabel = __instance`
+2. `OnFill` calls `UIFont.Print` synchronously
+3. `Print.Postfix` → stores `LabelDataObject` (text/verts/cols/indexMap) keyed by `currentRenderingLabel`
+4. `OnFill.Postfix` → clears `currentRenderingLabel = null`
+
+**Pitfalls learned**:
+- Text matching fails: `UILabel.text` can be empty at OnFill time, and Print receives differently-processed text.
+- Font matching fails: UIFont is shared across labels.
+- Use `dict[key] = value` (upsert), NOT `dict.Add()` — OnFill re-fires on re-render.
+- Do NOT cleanup stale registry entries in OnFill.Postfix — caused text to vanish (undiagnosed). Stale entries are negligible.
 
 ## Key Findings
 
-- **ZWS (U+200B) produces no vertices** — passes `c < ' '` check but `mFont.GetGlyph('\u200B')` returns null. Same for spaces, color codes, escape sequences.
-- **Vertex quad index != string index** — explicit `glyphToStringIndex` map required.
-- **Quad winding**: `[0]`=(right,top), `[1]`=(right,bottom), `[2]`=(left,bottom), `[3]`=(left,top). Local space.
-- **Color codes are runtime-injected** — `{{EFD27B}}`, `{{-}}` added by dialogue system, not in `.po` files.
-- **Hit-testing**: `ConversationDragContents` has the collider. TextLabel is at sibling path `ConversationDragPanel/TextLabel`. Use `textLabel.InverseTransformPoint(lastHit.point)` — NOT `Camera.main`.
+- **ZWS (U+200B) produces no vertices** — `mFont.GetGlyph('\u200B')` returns null. Same for spaces, color codes, escapes.
+- **Quad index != string index** — explicit index map required (`BuildIndexMap`).
+- **Quad winding**: `[0]`=TR, `[1]`=BR, `[2]`=BL, `[3]`=TL. Local space.
+- **Color codes** `{{EFD27B}}`/`{{-}}` are sometimes runtime-injected by dialogue system.
+- **Colliders**: `ConversationDragContents` and `ConversationResponse(Clone)` have colliders. Use `InverseTransformPoint(lastHit.point)` for hit-testing.
+- **No colliders**: BodyTextLabel, ChapterSummaryLabel, TitleLabel, ChapterNameLabel — raycast hits GroundPlane(Clone). Needs runtime BoxCollider injection.
+- **Label bounds**: top-left = `(po.x * rs.x, po.y * rs.y)`, bottom-right = `((po.x+1) * rs.x, (po.y-1) * rs.y)`. With TopLeft pivot: (0,0) to (rs.x, -rs.y). `relativeSize` units are opaque but match local space.
 
 ## Build
 
