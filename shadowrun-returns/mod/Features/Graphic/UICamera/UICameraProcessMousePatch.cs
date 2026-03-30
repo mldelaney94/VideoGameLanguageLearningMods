@@ -32,8 +32,7 @@ namespace ShadowrunReturnsLanguageEngage
         return;
       }
 
-      Vector3 textLabelPoint;
-      var textLabel = FindTextLabel(___lastHit.point, out textLabelPoint);
+      var textLabel = FindTextLabel(___lastHit.point, out Vector3 textLabelPoint);
 
       if (textLabel == null)
       {
