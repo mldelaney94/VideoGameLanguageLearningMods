@@ -19,6 +19,14 @@ Hover over text, left-click to select/pin a word. Highlighted in rendered text. 
 5. **NGUI popup** — `Features/Graphic/Popup/WordPopup.cs`: lazy GameObject with UILabel, position near selected word
 6. **Keyboard nav** — Left/Right arrow to navigate words via ZWS boundaries, Escape to clear
 
-## Open Risk
+## Popup Details (Step 5)
 
-Creating NGUI widgets dynamically (`UILabel`, `UISprite`, `UIPanel`) requires `NGUITools.AddWidget`/`AddChild` from Assembly-CSharp.dll — signatures unconfirmed. Fallback: clone existing widget's GameObject.
+- **Hierarchy**: UIRoot → SLRETextPopup (UIPanel, high depth) → UILabel + UISprite (background)
+- **Positioning**: static left/right based on collision source. ConversationDragContents & ConversationResponse(Clone) → popup on right. ResponseDragPanelTop & ObjectivesDragPanelContents → popup on left.
+- **Styling**: black background (UISprite or UITexture fallback), text color/font borrowed from existing UILabels in LabelRegistry, `label.lineWidth` for wrapping.
+- **Content**: full CEDICT entry — simplified, traditional, pinyin, English definitions.
+- **Creation**: lazy — created on first `Show()`, reused thereafter. `SetActive(false)` to hide.
+
+## Resolved Risk
+
+`NGUITools.AddWidget<T>(go)` and `NGUITools.AddChild<T>(go)` confirmed working. Signatures and behavior documented in mod.mdc. No need for clone fallback.

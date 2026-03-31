@@ -26,8 +26,8 @@ namespace ShadowrunReturnsLanguageEngage
       if (___mMouse.Length == 0 || ___mMouse[0].current == null) return;
       if (!collisionNamesToCheck.Contains(___mMouse[0].current.name))
       {
-        ShadowrunreturnsLanguageEngage.Log.LogInfo(___mMouse[0].current.name);
         lastWord = string.Empty;
+        WordPopup.Hide();
         return;
       }
 
@@ -49,6 +49,10 @@ namespace ShadowrunReturnsLanguageEngage
       {
         lastWord = word;
         ShadowrunreturnsLanguageEngage.Log.LogInfo($"{lastWord}");
+
+        var panel = NGUITools.FindInParents<UIPanel>(textLabel.transform.gameObject);
+        if (panel != null)
+          WordPopup.Show(word, panel, ___lastHit.point);
       }
     }
 

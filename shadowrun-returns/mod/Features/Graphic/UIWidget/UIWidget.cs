@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace ShadowrunReturnsLanguageEngage
 {
-  [HarmonyPatch(typeof(UIFontOnPrint), nameof(UIFont.Destroy))]
-  internal static class UIFontOnPrint
-  {
-    private static void Prefix()
-    {
-    }
-  }
+  // [HarmonyPatch(typeof(UIFontOnPrint), nameof(UIFont.Destroy))]
+  // internal static class UIFontOnPrint
+  // {
+  //   private static void Prefix()
+  //   {
+  //   }
+  // }
 }

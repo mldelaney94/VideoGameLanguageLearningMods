@@ -20,9 +20,20 @@ BepInEx 6.0.0-be.754, HarmonyX 2.10.2, Unity 4.2.0f4, .NET 3.5, Assembly-CSharp.
 
 ## Game Types
 
-- `UIFont` — NGUI font renderer. `Print()` fills `BetterList<Vector3>` verts and `BetterList<Color>` cols by ref. Multiple UILabels share one UIFont instance.
+- `UIFont` — NGUI font renderer. `Print()` fills `BetterList<Vector3>` verts and `BetterList<Color>` cols by ref. Multiple UILabels share one UIFont instance. Not a Component — it's an asset/property on UILabel (`label.font`).
 - `UIWidget` — base of `UILabel`. Has `pivotOffset`, `relativeSize` (Vector2s). No `worldCorners` in this NGUI version. All conversation labels use TopLeft pivot (0,0).
+- `UIPanel` — manages draw calls and clipping for child widgets. `UIPanel.depth` controls panel-level render order. Widgets must be under a UIPanel in the hierarchy to render.
 - `BetterList<T>` — NGUI list. Use `.size` for count.
+
+## NGUI Widget Creation
+
+- Use `NGUITools.AddWidget<T>(parent)` to create widgets — handles depth, scale `(100,100,1)`, layer. Raw `AddComponent<UIWidget>` skips this setup and widgets won't render.
+- Use `NGUITools.AddChild(parent)` for plain GameObjects, `NGUITools.AddChild<T>(parent)` for GameObjects with a component.
+- `NGUITools.FindInParents<T>(go)` — NGUI's equivalent of `GetComponentInParent<T>()` (which doesn't exist in Unity 4.2).
+- **Render order**: `UIPanel.depth` for panel-vs-panel, `UIWidget.depth` within the same panel. Layer controls camera visibility, NOT render order.
+- **Clipping**: scroll panels clip children. To overlay on top of everything, parent under `UIRoot` with your own `UIPanel` at a high depth.
+- **Popup hierarchy**: UIRoot → GameObject with UIPanel (container) → child widgets (UILabel, UISprite, etc.).
+- Borrow `UIFont` and `UIAtlas` references from existing scene widgets (e.g. via `Globals.LabelRegistry` keys).
 
 ## Architecture: Label Registry
 
