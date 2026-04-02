@@ -10,16 +10,16 @@ namespace ShadowrunReturnsLanguageEngage
   public class ShadowrunreturnsLanguageEngage : BaseUnityPlugin
   {
     internal static ManualLogSource Log { get; private set; }
-
     private readonly Harmony harmony = new("matthewdelaney.ShadowRunReturnsLanguageEngage");
 
     private void Awake()
     {
       Log = Logger;
+      Globals.CEDict = CEDictParser.ParseCEDict("./BepInEx/plugins/cedict_ts.u8");
+
       harmony.PatchAll();
-      Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
       UIFontPrintPatchTests.RunAll();
-      Globals.CEDict = CEDictParser.ParseCEDict("C:/dev/HanziEngage/shadowrun-returns/mod/Features/wEDict/CEDictText.txt");
+      CEDictParserTests.RunAll();
     }
   }
 }

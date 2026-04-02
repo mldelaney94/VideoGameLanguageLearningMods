@@ -31,7 +31,7 @@ namespace ShadowrunReturnsLanguageEngage
       }
     }
 
-    // Copied from UIFont.Print
+    // Based on UIFont.Print
     internal static List<int> BuildIndexMap(string text, bool encoding)
     {
       var indexMap = new List<int>();
@@ -46,7 +46,7 @@ namespace ShadowrunReturnsLanguageEngage
         if (c == ' ') continue;
         if (c == '\u200B') continue;
 
-        // skip {{.*}}'s
+        // skip {{.*}}'s if encoding is true
         if (encoding && c == '{' && i + 1 < length && text[i + 1] == '{'
             && (i == 0 || text[i - 1] != '\\'))
         {

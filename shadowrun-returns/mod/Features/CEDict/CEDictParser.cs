@@ -11,7 +11,8 @@ namespace ShadowrunReturnsLanguageEngage
 
       foreach (var line in File.ReadAllLines(filePath))
       {
-        if (string.IsNullOrEmpty(line) || line.Substring(0, 2) == "#!")
+
+        if (string.IsNullOrEmpty(line) || line.Substring(0, 1) == "#")
           continue;
 
         var simplified = GetSimplified(line);
@@ -38,10 +39,10 @@ namespace ShadowrunReturnsLanguageEngage
     }
     private static string GetPinyin(string line)
     {
-      var start = line.IndexOf('[');
+      var start = line.IndexOf('[') + 1; // skip [
       var end = line.IndexOf(']');
 
-      return line.Substring(start, end - start);
+      return line.Substring(start, end - start).Replace(" ", "");
     }
     private static string GetEnglish(string line)
     {

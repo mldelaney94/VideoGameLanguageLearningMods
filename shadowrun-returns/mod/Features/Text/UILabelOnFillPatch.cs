@@ -20,7 +20,6 @@ namespace ShadowrunReturnsLanguageEngage
     private static void Prefix(UILabel __instance)
     {
       var name = __instance.gameObject.name;
-      ShadowrunreturnsLanguageEngage.Log.LogInfo(name);
 
       if (Actions.ContainsKey(name))
       {
@@ -49,23 +48,24 @@ namespace ShadowrunReturnsLanguageEngage
 
       var chinese = parts[0];
       var pinyin = parts[1];
-      pinyin = pinyin[0].ToString().ToUpper() + pinyin.Substring(1);
-      pinyin = string.Join("", pinyin.Split(' '));
+      pinyin = char.ToUpper(pinyin[0]) + pinyin.Substring(1);
+      pinyin = pinyin.Replace(" ", "");
       return chinese + " " + pinyin;
     }
 
-    // Emote lines erroneously look like so: {{EFD27B}}chinese\n\npinyin{{-}}.
+    // Emote lines sometimes erroneously looks like so:
+    // {{EFD27B}}chinese\n\npinyin{{-}}.
     // This cannot be fixed in preprocessing because the game sometimes injects
     // the colours at runtime.
     // Split them into individually colored bracket-delimited lines
     private static string FormatTextLabel(string text)
     {
-      bool isSingleColorEmote =
+      bool isIncorrectlyFormattedEmote =
         text.StartsWith("{{EFD27B}}")
         && text.EndsWith("{{-}}")
         && Regex.Matches(text, Regex.Escape("{{EFD27B}}")).Count == 1;
 
-      if (isSingleColorEmote)
+      if (isIncorrectlyFormattedEmote)
         return string.Join("]{{-}}\n\n{{EFD27B}}[", text.Split('\n'));
 
       return text;
