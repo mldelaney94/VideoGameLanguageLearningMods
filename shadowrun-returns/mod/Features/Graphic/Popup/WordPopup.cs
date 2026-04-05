@@ -64,7 +64,6 @@ namespace ShadowrunReturnsLanguageEngage
       AddBackground(parentPanel.gameObject);
       var scrollBar = AddScrollBar(parentPanel.gameObject);
       AddTextPanel(parentPanel.gameObject, scrollBar);
-      AddDragPanelContent(parentPanel.gameObject);
     }
 
     private static UIAtlas GetAtlas()
@@ -119,25 +118,23 @@ namespace ShadowrunReturnsLanguageEngage
       thumbSprite.color = NGUITools.ParseColor(ScrollBarColour, 0);
 
       scrollBar.foreground = thumbSprite;
-      NGUITools.AddChild<BoxCollider>(scrollBar.foreground.gameObject);
-      var fgEventListener = NGUITools.AddChild<UIEventListener>(scrollBar.foreground.gameObject);
+      scrollBar.foreground.gameObject.AddComponent<BoxCollider>();
+      var fgEventListener = scrollBar.foreground.gameObject.AddComponent<UIEventListener>();
       var onPressForeground = typeof(UIScrollBar).GetMethod("OnPressForeground", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-      ShadowrunreturnsLanguageEngage.Log.LogInfo($"OnPressForeground resolved: {onPressForeground != null}");
       fgEventListener.onPress = (UIEventListener.BoolDelegate) Delegate.CreateDelegate(typeof(UIEventListener.BoolDelegate), scrollBar, onPressForeground);
       var onDragForeground = typeof(UIScrollBar).GetMethod("OnDragForeground", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-      ShadowrunreturnsLanguageEngage.Log.LogInfo($"OnDragForeground resolved: {onDragForeground != null}");
       fgEventListener.onDrag = (UIEventListener.VectorDelegate) Delegate.CreateDelegate(typeof(UIEventListener.VectorDelegate), scrollBar, onDragForeground);
       scrollBar.foreground.name = "Foreground";
+      scrollBar.foreground.depth = 2;
       scrollBar.background = trackSprite;
-      NGUITools.AddChild<BoxCollider>(scrollBar.background.gameObject);
-      var bgEventListener = NGUITools.AddChild<UIEventListener>(scrollBar.background.gameObject);
+      scrollBar.background.gameObject.AddComponent<BoxCollider>();
+      var bgEventListener = scrollBar.background.gameObject.AddComponent<UIEventListener>();
       var onPressBackground = typeof(UIScrollBar).GetMethod("OnPressBackground", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-      ShadowrunreturnsLanguageEngage.Log.LogInfo($"OnPressBackground resolved: {onPressBackground != null}");
       bgEventListener.onPress = (UIEventListener.BoolDelegate) Delegate.CreateDelegate(typeof(UIEventListener.BoolDelegate), scrollBar, onPressBackground);
       var onDragBackground = typeof(UIScrollBar).GetMethod("OnDragBackground", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-      ShadowrunreturnsLanguageEngage.Log.LogInfo($"OnDragBackground resolved: {onDragBackground != null}");
       bgEventListener.onDrag = (UIEventListener.VectorDelegate) Delegate.CreateDelegate(typeof(UIEventListener.VectorDelegate), scrollBar, onDragBackground);
       scrollBar.background.name = "Background";
+      scrollBar.background.depth = 1;
 
       return scrollBar;
     }
@@ -149,7 +146,7 @@ namespace ShadowrunReturnsLanguageEngage
       panel.clipping = UIDrawCall.Clipping.HardClip;
       panel.clipRange = new Vector4(0, 0, PanelWidth, PanelHeight);
 
-      var dragPanel = NGUITools.AddChild<UIDraggablePanel>(panel.gameObject);
+      var dragPanel = panel.gameObject.AddComponent<UIDraggablePanel>();
       dragPanel.transform.localScale = new Vector3(PanelWidth, PanelHeight, 1f);
       dragPanel.verticalScrollBar = scrollBar;
       dragPanel.dragEffect = UIDraggablePanel.DragEffect.Momentum;
@@ -169,14 +166,9 @@ namespace ShadowrunReturnsLanguageEngage
 
       var dragPanelContents = NGUITools.AddChild<UIDragPanelContents>(parent);
       dragPanelContents.draggablePanel = dragPanel;
-
-      NGUITools.AddChild<BoxCollider>(dragPanelContents.gameObject);
+      dragPanelContents.gameObject.AddComponent<BoxCollider>();
 
       return panel;
-    }
-
-    private static void AddDragPanelContent(GameObject parent)
-    {
     }
 
     private static Material CreateFlatMaterial(int renderQueue)
