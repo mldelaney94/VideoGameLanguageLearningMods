@@ -12,6 +12,10 @@ using UnityEngine;
 // 'ConversationDragContents', because it needs to appear from
 // multiple different places in the game, and that component won't
 // always be available.
+
+// It was made by using component dumper on both this component,
+// and 'ConversationDragContents', and then laboriously changing
+// things until the dump output matched.
 namespace ShadowrunReturnsLanguageEngage
 {
   public static class WordPopup
