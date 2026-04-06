@@ -5,9 +5,11 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 
-// AI slop to dump the component hierarchy of a game object
 namespace ShadowrunReturnsLanguageEngage
 {
+  /// <summary>
+  /// AI slop to dump the component hierarchy of a game object
+  /// </summary>
   internal static class ComponentDumper
   {
     private static readonly HashSet<string> dumped = new HashSet<string>();
