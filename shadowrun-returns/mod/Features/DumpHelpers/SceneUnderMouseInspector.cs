@@ -37,6 +37,7 @@ namespace ShadowrunReturnsLanguageEngage
       lastLoggedTarget = cur;
 
       var log = ShadowrunreturnsLanguageEngage.Log;
+      log.LogInfo("====================");
       log.LogInfo(
         $"[SceneUnderMouse] NGUI current={cur.name} layer={cur.layer} ({LayerMask.LayerToName(cur.layer)}) path={HierarchyPath(cur.transform)}");
 

@@ -19,6 +19,11 @@ namespace ShadowrunReturnsLanguageEngage
       Globals.CEDict = CEDictParser.ParseCEDict("./BepInEx/plugins/cedict_ts.u8");
       File.Delete(ComponentDumper.OutputPath);
 
+      SceneUnderMouseInspector.Enabled = true;
+      SceneUnderMouseInspector.Verbose = true;
+      // SceneUnderMouseInspector.Enabled = true; // under-cursor NGUI + camera/layer lines when hover target changes
+      // SceneUnderMouseInspector.Verbose = true;  // also: ConversationDragContents compare, UICamera mask fields, extra raycasts
+
       harmony.PatchAll();
       UIFontPrintPatchTests.RunAll();
       CEDictParserTests.RunAll();

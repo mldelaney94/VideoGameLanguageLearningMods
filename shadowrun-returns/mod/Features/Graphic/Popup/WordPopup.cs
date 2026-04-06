@@ -134,7 +134,7 @@ namespace ShadowrunReturnsLanguageEngage
       trackSprite.spriteName = "scrollBarFrame";
       trackSprite.color = NGUITools.ParseColor(ScrollBarColour, 0);
       trackSprite.transform.localScale = new Vector3(28f, PanelHeight * 2f, 1f);
-      trackSprite.name = "Background";
+      trackSprite.name = "ScrollbarBackground";
       trackSprite.depth = 1;
       var bgCollider = trackSprite.gameObject.AddComponent<BoxCollider>();
       bgCollider.center = new Vector3(0, -0.5f, 0);
@@ -149,7 +149,7 @@ namespace ShadowrunReturnsLanguageEngage
       thumbSprite.spriteName = "scrollBar";
       thumbSprite.color = NGUITools.ParseColor(ScrollBarColour, 0);
       thumbSprite.transform.localScale = new Vector3(32f, PanelHeight * 2f, 1f);
-      thumbSprite.name = "Foreground";
+      thumbSprite.name = "ScrollbarForeground";
       thumbSprite.depth = 2;
       var fgCollider = thumbSprite.gameObject.AddComponent<BoxCollider>();
       fgCollider.center = new Vector3(0, -0.5f, 0);
