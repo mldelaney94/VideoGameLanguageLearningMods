@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
+using TScript.Ops;
 using UnityEngine;
 
 // This class essentially just tries to replicate 'ConversationDragContents'
@@ -25,8 +27,7 @@ namespace ShadowrunReturnsLanguageEngage
     private static UIAtlas pdaAtlas;
 
     private const int PanelWidth = 300;
-    private const int PanelHeight = 400;
-    private const int TextLineWidth = 280;
+    private const int PanelHeight = 200;
     private const int BorderThickness = 1;
     private const int PopupVerticalOffset = -175;
     private const int PopupRightOffset = -400;
@@ -36,13 +37,6 @@ namespace ShadowrunReturnsLanguageEngage
     private const string WordHighlightColor = "EFD27B"; // yellow
     private const string ScrollBarColour = "1DD0DE"; // Light-blue, same as in-game scroll-bar colour
 
-    // Tie-break vs low-depth anchor chrome; scrollbar above label where they overlap.
-    private const int DepthPopupBackground = 100;
-    private const int DepthPopupBorder = 101;
-    private const int DepthTextLabel = 110;
-    private const int DepthScrollTrack = 125;
-    private const int DepthScrollThumb = 126;
-
     public static void Show(string text, UIPanel convoPanel, Vector3 worldPos)
     {
       if (Regex.IsMatch(text, "[0-9a-zA-Z]+")) return;
@@ -51,6 +45,7 @@ namespace ShadowrunReturnsLanguageEngage
       label.text = FormatDictionaryDefinition(text);
       Position(convoPanel, worldPos);
       parentPanel.gameObject.SetActive(true);
+
 
       ComponentDumper.Dump(parentPanel.gameObject);
     }
@@ -71,21 +66,18 @@ namespace ShadowrunReturnsLanguageEngage
 
     private static void Position(UIPanel convoPanel, Vector3 worldPos)
     {
-      var root = NGUITools.FindInParents<UIRoot>(convoPanel.gameObject);
       // Same parent as the panel that opened us (usually ConversationAnchor — sibling of Background) so ray depth matches that UI subtree.
-      Transform parentTransform = convoPanel.transform.parent != null
-        ? convoPanel.transform.parent
-        : root.transform;
+      var parentTransform = convoPanel.transform.parent;
       if (parentPanel.transform.parent != parentTransform)
         parentPanel.transform.parent = parentTransform;
 
       var isRight = worldPos.x > 0;
       var xOffset = isRight ? PopupRightOffset : PopupLeftOffset;
-      var clp = convoPanel.transform.localPosition;
+      var localPos = convoPanel.transform.localPosition;
       parentPanel.transform.localPosition = new Vector3(
-        clp.x + xOffset,
+        localPos.x + xOffset,
         PopupVerticalOffset,
-        clp.z);
+        localPos.z);
     }
 
     private static void Create(UIRoot root)
@@ -121,13 +113,11 @@ namespace ShadowrunReturnsLanguageEngage
       panel.name = "SLRETextPopupBackground";
 
       var bg = NGUITools.AddWidget<UITexture>(panel.gameObject);
-      bg.depth = DepthPopupBackground;
       bg.color = NGUITools.ParseColor(BackgroundColor, 0);
       bg.transform.localScale = new Vector3(PanelWidth, PanelHeight, 1f);
       bg.material = CreateFlatMaterial(renderQueue: 1);
 
       var border = NGUITools.AddWidget<UITexture>(panel.gameObject);
-      border.depth = DepthPopupBorder;
       border.color = NGUITools.ParseColor(BorderColor, 0);
       border.transform.localScale = new Vector3(
         PanelWidth + BorderThickness,
@@ -153,7 +143,6 @@ namespace ShadowrunReturnsLanguageEngage
       trackSprite.color = NGUITools.ParseColor(ScrollBarColour, 0);
       trackSprite.transform.localScale = new Vector3(28f, PanelHeight * 2f, 1f);
       trackSprite.name = "ScrollbarBackground";
-      trackSprite.depth = DepthScrollTrack;
       var bgCollider = trackSprite.gameObject.AddComponent<BoxCollider>();
       bgCollider.center = new Vector3(0, -0.5f, 0);
       var bgEventListener = trackSprite.gameObject.AddComponent<UIEventListener>();
@@ -168,7 +157,6 @@ namespace ShadowrunReturnsLanguageEngage
       thumbSprite.color = NGUITools.ParseColor(ScrollBarColour, 0);
       thumbSprite.transform.localScale = new Vector3(32f, PanelHeight * 2f, 1f);
       thumbSprite.name = "ScrollbarForeground";
-      thumbSprite.depth = DepthScrollThumb;
       var fgCollider = thumbSprite.gameObject.AddComponent<BoxCollider>();
       fgCollider.center = new Vector3(0, -0.5f, 0);
       var fgEventListener = thumbSprite.gameObject.AddComponent<UIEventListener>();
@@ -190,7 +178,8 @@ namespace ShadowrunReturnsLanguageEngage
       var panel = NGUITools.AddChild<UIPanel>(parent);
       panel.name = "SLRETextPopupTextPanel";
       panel.clipping = UIDrawCall.Clipping.HardClip;
-      panel.clipRange = new Vector4(0, 0, PanelWidth, PanelHeight);
+      panel.clipRange = new Vector4(0, 0, PanelWidth-20, PanelHeight-20);
+      panel.transform.localPosition = new(5, -5, 0);
 
       var dragPanel = panel.gameObject.AddComponent<UIDraggablePanel>();
       dragPanel.verticalScrollBar = scrollBar;
@@ -201,14 +190,19 @@ namespace ShadowrunReturnsLanguageEngage
       var onVerticalBar = typeof(UIDraggablePanel).GetMethod("OnVerticalBar", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
       scrollBar.onChange = (UIScrollBar.OnScrollBarChange) Delegate.CreateDelegate(typeof(UIScrollBar.OnScrollBarChange), dragPanel, onVerticalBar);
 
+      // we need this label to copy from
+      var ingameLabel = FindLabel();
       // we need this label so we can set the text on it dynamically later
       // avoiding having to recreate these static instances
       label = NGUITools.AddWidget<UILabel>(panel.gameObject);
-      label.depth = DepthTextLabel;
-      label.font = FindFont();
-      label.lineWidth = TextLineWidth;
+      label.font = ingameLabel.font;
+      label.lineWidth = PanelWidth - 40;
       label.pivot = UIWidget.Pivot.TopLeft;
-      label.transform.localPosition = new Vector3(-PanelWidth / 2f, PanelHeight / 2f, 0);
+      label.transform.localScale = ingameLabel.transform.localScale;
+
+      // needs to be called because setting localscale on uilabel messes with the positioning
+      // and it needs to be recalculated
+      dragPanel.ResetPosition();
 
       var dragPanelContents = NGUITools.AddChild<UIDragPanelContents>(parent);
       dragPanelContents.draggablePanel = dragPanel;
@@ -226,11 +220,17 @@ namespace ShadowrunReturnsLanguageEngage
       };
     }
 
-    private static UIFont FindFont()
+    private static UILabel FindLabel()
     {
       foreach (var key in Globals.LabelRegistry.Keys)
       {
-        if (key.transform != null) return key.font;
+        if (key.transform != null)
+        {
+          if (key.transform.localScale != Vector3.one)
+          {
+            return key;
+          }
+        }
       }
       return null;
     }
@@ -239,9 +239,9 @@ namespace ShadowrunReturnsLanguageEngage
     // specifically for this popup
     private static string FormatDictionaryDefinition(string word)
     {
-      return "{{" + WordHighlightColor + "}}" + word + "{{-}}" + '\n'
-        + Globals.CEDict[word]["pinyin"] + '\n'
-        + Globals.CEDict[word]["english"];
+      return "{{" + WordHighlightColor + "}}" + word + "{{-}}" + "\n\n"
+        + Globals.CEDict[word]["pinyin"] + "\n----------" + "\n\n"
+        + string.Join("\n\n", Globals.CEDict[word]["english"].Split('/'));
     }
   }
 }
