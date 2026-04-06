@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Shadowrun Returns Mod
 
-BepInEx mod for Shadowrun Returns (Unity 4.2.0f4). Hooks into NGUI text rendering for per-word interaction.
+BepInEx mod for Shadowrun Returns (Unity 4.2.0f4). Hooks into NGUI text rendering for per-word interaction and a custom dictionary popup (`WordPopup`).
 
 ## Tech Stack
 
@@ -21,19 +21,36 @@ BepInEx 6.0.0-be.754, HarmonyX 2.10.2, Unity 4.2.0f4, .NET 3.5, Assembly-CSharp.
 ## Game Types
 
 - `UIFont` — NGUI font renderer. `Print()` fills `BetterList<Vector3>` verts and `BetterList<Color>` cols by ref. Multiple UILabels share one UIFont instance. Not a Component — it's an asset/property on UILabel (`label.font`).
-- `UIWidget` — base of `UILabel`. Has `pivotOffset`, `relativeSize` (Vector2s). No `worldCorners` in this NGUI version. All conversation labels use TopLeft pivot (0,0).
-- `UIPanel` — manages draw calls and clipping for child widgets. `UIPanel.depth` controls panel-level render order. Widgets must be under a UIPanel in the hierarchy to render.
+- `UIWidget` — base of `UILabel`, `UISprite`, `UITexture`, etc. Has `depth` (integer) used for **draw and raycast ordering** among UI colliders. Has `pivotOffset`, `relativeSize` (Vector2s). No `worldCorners` in this NGUI version. Conversation labels use TopLeft pivot (0,0).
+- `UIPanel` — manages draw calls and clipping for child widgets. Widgets must live under a `UIPanel` (in the ancestor chain) to render correctly. **Do not assume `UIPanel.depth` exists** in this game's NGUI — the shipped `UIPanel` type may not expose a `depth` field; use **`UIWidget.depth`** and hierarchy/Z when tuning hit order.
 - `BetterList<T>` — NGUI list. Use `.size` for count.
 
 ## NGUI Widget Creation
 
-- Use `NGUITools.AddWidget<T>(parent)` to create widgets — handles depth, scale `(100,100,1)`, layer. Raw `AddComponent<UIWidget>` skips this setup and widgets won't render.
+- Use `NGUITools.AddWidget<T>(parent)` to create widgets — handles depth, default scale, layer. Raw `AddComponent<UIWidget>` skips this setup and widgets won't render reliably.
 - Use `NGUITools.AddChild(parent)` for plain GameObjects, `NGUITools.AddChild<T>(parent)` for GameObjects with a component.
 - `NGUITools.FindInParents<T>(go)` — NGUI's equivalent of `GetComponentInParent<T>()` (which doesn't exist in Unity 4.2).
-- **Render order**: `UIPanel.depth` for panel-vs-panel, `UIWidget.depth` within the same panel. Layer controls camera visibility, NOT render order.
-- **Clipping**: scroll panels clip children. To overlay on top of everything, parent under `UIRoot` with your own `UIPanel` at a high depth.
-- **Popup hierarchy**: UIRoot → GameObject with UIPanel (container) → child widgets (UILabel, UISprite, etc.).
-- Borrow `UIFont` and `UIAtlas` references from existing scene widgets (e.g. via `Globals.LabelRegistry` keys).
+- `NGUITools.FindCameraForLayer(int layer)` — which camera is used for that layer; should match `UICamera.currentCamera` for UI when the cursor is over UI on that layer.
+
+## Render order, layers, and raycasts
+
+- **Unity layer** (e.g. 12 = "UI") — assigned to GameObjects with colliders; must be included in whatever mask Physics/NGUI uses for UI hits.
+- **`Camera.cullingMask`** — which layers the camera **draws**. Often several bits (e.g. `0x20001000` = multiple layers).
+- **`UICamera.eventReceiverMask`** — which layers NGUI uses for **UI raycasts**. In practice often **one** layer (e.g. `0x00001000` = bit 12 = layer 12). This is **not** the same value as `cullingMask`; both are expected to differ.
+- **`UICamera.mLayerMask`** — may be `0` or unused in this build; prefer **`eventReceiverMask`** when interpreting UI hit filtering.
+- **`UIWidget.depth`** — primary sort key when NGUI chooses among **multiple UI collider hits** on the same setup. It does **not** move geometry; it breaks ties after colliders qualify.
+- **Physics ray along the UI camera** — the **closest** collider along the ray (and NGUI's sort rules) wins. A full-screen **`ConversationAnchor/Background`** can beat a popup that lives only under **`UIRoot`** if it is in front in **world/local Z** or wins the combined sort. **Reparenting** under the same anchor and nudging **local Z** can be necessary; widget depth alone may be insufficient across separate UI branches.
+- **Collider without `UIWidget` on the same GameObject** — NGUI may not associate a proper widget depth with that hit (e.g. bare `BoxCollider` on `UIDragPanelContents` only). Prefer **`UITexture`** (nearly invisible) **on the same GameObject** as `BoxCollider` + `UIDragPanelContents` so raycast ordering matches other UI.
+- **Drag hit volume** — vanilla `ConversationDragContents` uses **`BoxCollider.size (1,1,1)`** with **`transform.localScale`** set to the drag rectangle **`(width, height, 1)`**. Scale `(1,1,1)` on the contents object yields a **tiny** collider even if textures look full-size.
+- **Clipping** — scroll panels clip children. Overlays must respect panel ancestry and depth/Z relative to blocking widgets (e.g. conversation chrome).
+
+**Popup hierarchy (typical)** — `UIRoot` → root `UIPanel` → nested panels, `UILabel`, `UITexture`, `UIDragPanelContents`, etc. See `Features/Graphic/Popup/WordPopup.cs`.
+
+**Matching vanilla drag UI** — `UIDragPanelContents` only needs `draggablePanel` pointing at the correct `UIDraggablePanel`; parent object identity can differ. Vanilla `UIDraggablePanel` **`scale`** may be `(0, 1, 0)` vs `(1, 1, 1)` for axis gating; worth matching if scroll/drag feels wrong.
+
+## Interpreting "layer 12" under the cursor
+
+Seeing **layer 12 (UI)** for both conversation text and empty letterbox does **not** by itself mean the wrong layer — it often means the **same physics layer** is shared and the **logged hit** is whatever collider won (e.g. `Background`). Use hierarchy path + hit object name to see whether the ray reached your widget.
 
 ## Architecture: Label Registry
 
@@ -50,6 +67,13 @@ BepInEx 6.0.0-be.754, HarmonyX 2.10.2, Unity 4.2.0f4, .NET 3.5, Assembly-CSharp.
 - Use `dict[key] = value` (upsert), NOT `dict.Add()` — OnFill re-fires on re-render.
 - Do NOT cleanup stale registry entries in OnFill.Postfix — caused text to vanish (undiagnosed). Stale entries are negligible.
 
+## Investigation helpers (DumpHelpers)
+
+| Tool | File | Role |
+|------|------|------|
+| **ComponentDumper** | `Features/DumpHelpers/ComponentDumper.cs` | Dumps component hierarchy for a `GameObject` to log + `component-dump.txt`. |
+| **SceneUnderMouseInspector** | `Features/DumpHelpers/SceneUnderMouseInspector.cs` | When **`SceneUnderMouseInspector.Enabled`** (and optionally **`.Verbose`**) is set from `ShadowrunreturnsLanguageEngage.Awake`, a **separate** Harmony postfix on `UICamera.ProcessMouse` logs the NGUI hover target, physics `lastHit`, `UICamera.currentCamera` **cullingMask**, `NGUITools.FindCameraForLayer`, and reflected `UICamera` mask fields. **Layer masks are logged as hex + decimal + decoded layer indices and `LayerMask.LayerToName` for each set bit** so masks need no manual decoding. Keeps `UICameraProcessMousePatch` free of probe code. |
+
 ## Key Findings
 
 - **ZWS (U+200B) produces no vertices** — `mFont.GetGlyph('\u200B')` returns null. Same for spaces, color codes, escapes.
@@ -63,3 +87,7 @@ BepInEx 6.0.0-be.754, HarmonyX 2.10.2, Unity 4.2.0f4, .NET 3.5, Assembly-CSharp.
 ## Build
 
 Requires `libs/Assembly-CSharp.dll` from game's `Managed/` folder. Build with `dotnet build` or VS 2022.
+
+## Related docs
+
+- End-user oriented: `mod/README.md`
