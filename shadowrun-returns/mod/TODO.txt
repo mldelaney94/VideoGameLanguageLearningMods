@@ -1,0 +1,9 @@
+mei3 should not be mo2
+
+we have a problem where jieba understands as a word
+something which does not have a direct entry in CEDICT
+
+meaning that no popup displays for quite a bit of text
+
+This would have to be algorithmically solved as there's
+far too many for it to be not annoying.
