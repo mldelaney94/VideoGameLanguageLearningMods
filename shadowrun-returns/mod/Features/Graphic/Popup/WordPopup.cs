@@ -227,7 +227,12 @@ namespace ShadowrunReturnsLanguageEngage
 
     private static void SetTextBoxPosition(UIPanel convoPanel, Vector3 worldPos)
     {
-      // Same parent as the panel that opened us (usually ConversationAnchor — sibling of Background) so ray depth matches that UI subtree.
+      // positioning is tricky, you want a popup to appear relative to its spawning point
+      // but the logical way of arranging that, i.e. that the we take the parent of the
+      // spawner and position it around that, would mean it doesn't appear, because that positions it
+      // outside of the bounding box of the parent. So we render it as a child on the root, and then
+      // position it absolutely on the screen, but use the transform of the spawner to match
+      // ray depth matches the UI subtree and relative position to the spawner
       var parentTransform = convoPanel.transform.parent;
       textBox.transform.parent = parentTransform;
 
