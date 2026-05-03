@@ -1,4 +1,4 @@
-# ChineseLanguageEngage
+# Video game language learning mods
 
 A collection of game mods that add language-learning support. Each mod hooks into a game's text rendering to enable per-word interaction, hover detection, and dictionary lookup — turning gameplay into immersive reading practice.
 
