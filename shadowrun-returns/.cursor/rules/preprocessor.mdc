@@ -1,6 +1,6 @@
 ---
 description: Shadowrun Returns Python preprocessor for Chinese .po file processing
-globs: preprocessor/**
+globs: chinese_preprocessor/**
 alwaysApply: false
 ---
 
@@ -23,4 +23,4 @@ Python script that processes Chinese `.po` translation files for Shadowrun Retur
 
 ## Running
 
-From `shadowrun-returns/preprocessor/`: `python main.py`
+From `shadowrun-returns/chinese_preprocessor/`: `python main.py`

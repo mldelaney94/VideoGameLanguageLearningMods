@@ -12,12 +12,12 @@ Monorepo for game mods that add Chinese language-learning support. The repo exis
 | Directory | Purpose |
 |-----------|---------|
 | `cedict/` | Shared CEDICT dictionary data (runtime dependency for all mods) |
-| `shadowrun-returns/` | Shadowrun Returns — contains `mod/` (BepInEx plugin) and `preprocessor/` (Python pipeline) |
+| `shadowrun-returns/` | Shadowrun Returns — contains `mod/` (BepInEx plugin) and `chinese_preprocessor/` (Python pipeline) |
 
 ## Conventions
 
 - Game directories use kebab-case (e.g. `shadowrun-returns`, `baldurs-gate-2`).
-- Each game has `mod/` (runtime plugin, own `.sln`) and `preprocessor/` (Python, depends on `pinyiniser`).
+- Each game has `mod/` (runtime plugin, own `.sln`) and a preprocessor folder (e.g. `chinese_preprocessor/`, Python, depends on `pinyiniser`).
 - CEDICT is shared; preprocessors are game-specific (different file formats per game).
 
 ## Workspace Workflow

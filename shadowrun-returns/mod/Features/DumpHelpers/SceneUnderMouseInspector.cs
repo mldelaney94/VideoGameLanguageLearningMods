@@ -14,7 +14,7 @@ namespace ShadowrunReturnsLanguageEngage
   internal static class SceneUnderMouseInspector
   {
     /// <summary>When true, logs whenever NGUI’s hover target changes.</summary>
-    public static bool Enabled;
+    public static bool Enabled = false;
 
     /// <summary>Extra lines: UICamera mask fields (reflection), extra Physics.Raycast comparison.</summary>
     public static bool Verbose;

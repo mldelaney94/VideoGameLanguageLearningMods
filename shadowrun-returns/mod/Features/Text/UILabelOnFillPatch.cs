@@ -1,8 +1,6 @@
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using UnityEngine;
 
 namespace ShadowrunReturnsLanguageEngage
 {
@@ -12,8 +10,8 @@ namespace ShadowrunReturnsLanguageEngage
     // tried to add the level loading text, but it has no collider
     private static readonly Dictionary<string, Func<string, string>> Actions = new()
     {
-      { "NameLabel", FormatNameLabel },
-      { "TextLabel", FormatTextLabel },
+      { "NameLabel", Globals.plugin.FormatNameLabel },
+      { "TextLabel", Globals.plugin.FormatTextLabel },
       { "ChapterSummaryLabel", Noop },
     };
 
@@ -35,39 +33,6 @@ namespace ShadowrunReturnsLanguageEngage
 
     private static string Noop(string text)
     {
-      return text;
-    }
-
-    // NameLabel text arrives as "Chinese\npin yin" — collapse pinyin spaces
-    // and capitalize, then place it inline: "Chinese Pinyin"
-    private static string FormatNameLabel(string text)
-    {
-      var parts = text.Split('\n');
-
-      if (parts.Length < 2) return text;
-
-      var chinese = parts[0];
-      var pinyin = parts[1];
-      pinyin = char.ToUpper(pinyin[0]) + pinyin.Substring(1);
-      pinyin = pinyin.Replace(" ", "");
-      return chinese + " " + pinyin;
-    }
-
-    // Emote lines sometimes erroneously looks like so:
-    // {{EFD27B}}chinese\n\npinyin{{-}}.
-    // This cannot be fixed in preprocessing because the game sometimes injects
-    // the colours at runtime.
-    // Split them into individually colored bracket-delimited lines
-    private static string FormatTextLabel(string text)
-    {
-      bool isIncorrectlyFormattedEmote =
-        text.StartsWith("{{EFD27B}}")
-        && text.EndsWith("{{-}}")
-        && Regex.Matches(text, Regex.Escape("{{EFD27B}}")).Count == 1;
-
-      if (isIncorrectlyFormattedEmote)
-        return string.Join("]{{-}}\n\n{{EFD27B}}[", text.Split('\n'));
-
       return text;
     }
   }

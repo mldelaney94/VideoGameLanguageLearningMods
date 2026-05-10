@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace ShadowrunReturnsLanguageEngage
@@ -27,7 +28,7 @@ namespace ShadowrunReturnsLanguageEngage
         Assert("english is movable property/personal property/",
           entry["english"] == "movable property/personal property/");
 
-        ShadowrunreturnsLanguageEngage.Log.LogInfo(
+        Console.WriteLine(
           "[CEDictParserTests] ParseLine PASSED");
       }
       finally
@@ -39,7 +40,7 @@ namespace ShadowrunReturnsLanguageEngage
     private static void Assert(string label, bool condition)
     {
       if (!condition)
-        ShadowrunreturnsLanguageEngage.Log.LogError($"[FAIL] CEDict: {label}");
+        Console.WriteLine($"[FAIL] CEDict: {label}");
     }
   }
 }

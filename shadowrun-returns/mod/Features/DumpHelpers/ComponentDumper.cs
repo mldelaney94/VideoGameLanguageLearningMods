@@ -14,9 +14,11 @@ namespace ShadowrunReturnsLanguageEngage
   {
     private static readonly HashSet<string> dumped = new HashSet<string>();
     public const string OutputPath = "./BepInEx/plugins/component-dump.txt";
+    private const bool enabled = false;
 
     internal static void Dump(GameObject go, int maxDepth = 8)
     {
+      if (!enabled) return;
       if (dumped.Contains(go.name)) return;
       dumped.Add(go.name);
 

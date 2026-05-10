@@ -1,7 +1,4 @@
 using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using TScript.Ops;
 using UnityEngine;
 
 // This class essentially just tries to replicate 'ConversationDragContents'
@@ -34,7 +31,6 @@ namespace ShadowrunReturnsLanguageEngage
     private const int PopupLeftOffset = 450;
     private const string BackgroundColor = "060606"; // grey-black
     private const string BorderColor = "62b6bd"; // light-blue
-    private const string WordHighlightColor = "EFD27B"; // yellow
     private const string ScrollBarColour = "1DD0DE"; // Light-blue, same as in-game scroll-bar colour
 
     public static void Hide()
@@ -44,8 +40,8 @@ namespace ShadowrunReturnsLanguageEngage
 
     public static void Show(string text, UIPanel convoPanel, Vector3 worldPos)
     {
-      // skip pinyin
-      if (Regex.IsMatch(text, "[0-9a-zA-Z]+")) return;
+      // skip certain word types - used to skip popping up when mousing over pinyin in the chinese version
+      if (!Globals.plugin.ShouldDisplayPopupForWordUnderMouse(text)) return;
 
       CreateTextBoxIfNotExists(convoPanel);
       SetTextBoxText(text);
@@ -65,10 +61,10 @@ namespace ShadowrunReturnsLanguageEngage
     {
       textBox = NGUITools.AddChild<UIPanel>(root.gameObject);
       textBox.name = "SLRETextPopup";
-      pdaAtlas = GetAtlas();
 
+      pdaAtlas = GetAtlas();
       AddBackground(textBox.gameObject);
-      var scrollBar = AddScrollBar(textBox.gameObject);
+      var scrollBar = AddScrollBar(textBox.gameObject, pdaAtlas);
       AddTextPanel(textBox.gameObject, scrollBar);
     }
 
@@ -115,7 +111,7 @@ namespace ShadowrunReturnsLanguageEngage
       };
     }
 
-    private static UIScrollBar AddScrollBar(GameObject parent)
+    private static UIScrollBar AddScrollBar(GameObject parent, UIAtlas atlas)
     {
       var scrollBar = NGUITools.AddChild<UIScrollBar>(parent);
       scrollBar.name = "SLRETextPopupScrollBar";
@@ -127,7 +123,7 @@ namespace ShadowrunReturnsLanguageEngage
       scalar.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
 
       var trackSprite = NGUITools.AddWidget<UISlicedSprite>(scalar);
-      trackSprite.atlas = pdaAtlas;
+      trackSprite.atlas = atlas;
       trackSprite.spriteName = "scrollBarFrame";
       trackSprite.color = NGUITools.ParseColor(ScrollBarColour, 0);
       trackSprite.transform.localScale = new Vector3(28f, PanelHeight * 2f, 1f);
@@ -141,7 +137,7 @@ namespace ShadowrunReturnsLanguageEngage
       transformNode.transform.localPosition = new Vector3(1f, 0, 0);
 
       var thumbSprite = NGUITools.AddWidget<UISlicedSprite>(transformNode);
-      thumbSprite.atlas = pdaAtlas;
+      thumbSprite.atlas = atlas;
       thumbSprite.spriteName = "scrollBar";
       thumbSprite.color = NGUITools.ParseColor(ScrollBarColour, 0);
       thumbSprite.transform.localScale = new Vector3(32f, PanelHeight * 2f, 1f);
@@ -222,7 +218,7 @@ namespace ShadowrunReturnsLanguageEngage
 
     private static void SetTextBoxText(string text)
     {
-      label.text = FormatDictionaryDefinition(text);
+      label.text = Globals.plugin.FormatDictionaryDefinition(text);
     }
 
     private static void SetTextBoxPosition(UIPanel convoPanel, Vector3 worldPos)
@@ -243,15 +239,6 @@ namespace ShadowrunReturnsLanguageEngage
         localPos.x + xOffset,
         PopupVerticalOffset,
         localPos.z);
-    }
-
-    // This belongs here because it formats the string for display
-    // specifically for this popup
-    private static string FormatDictionaryDefinition(string word)
-    {
-      return "{{" + WordHighlightColor + "}}" + word + "{{-}}" + "\n\n"
-        + Globals.CEDict[word]["pinyin"] + "\n----------" + "\n\n"
-        + string.Join("\n\n", Globals.CEDict[word]["english"].Split('/'));
     }
   }
 }

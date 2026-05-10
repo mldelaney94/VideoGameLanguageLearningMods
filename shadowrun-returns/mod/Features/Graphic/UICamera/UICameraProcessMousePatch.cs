@@ -48,7 +48,7 @@ namespace ShadowrunReturnsLanguageEngage
         return;
       }
 
-      string word = ExtractWord(quadIndex, textLabel);
+      string word = Globals.plugin.ExtractWord(quadIndex, textLabel.text, textLabel.textIndices);
       if (word.Length > 0 && word != lastWord)
       {
         lastWord = word;
@@ -104,39 +104,6 @@ namespace ShadowrunReturnsLanguageEngage
       }
 
       return -1;
-    }
-
-    private static string ExtractWord(int vertexBaseIndex, LabelDataObject label)
-    {
-      int quadNumber = vertexBaseIndex / 4;
-      if (quadNumber >= label.textIndices.Count) return "";
-
-      int strIdx = label.textIndices[quadNumber];
-      var text = label.text; 
-
-      if (IsBoundary(text[strIdx])) return "";
-
-      int left = strIdx;
-      while (left > 0 && !IsBoundary(text[left - 1]))
-        left--;
-
-      int right = strIdx;
-      while (right < text.Length - 1 && !IsBoundary(text[right + 1]))
-        right++;
-
-      return text.Substring(left, right - left + 1);
-    }
-
-    private static bool IsBoundary(char c)
-    {
-      return c == '\u200B' || c == ' ' || c == '\n'
-        || c == '[' || c == ']' || c == '{' || c == '}' || c == '\\'
-        || c == '？' || c == '，' || c == '！' || c == '。' || c == '；'
-        || c == '"' || c == '：' || c == '–' || c == '—'
-        || c == '＊' || c == '…' || c == '、' || c == '～' || c == '－'
-        || c == '（' || c == '）' || c == '─' || c == '＜' || c == '＞'
-        || c == '．' || c == '《' || c == '》' || c == '％' || c == '·'
-        || c == '\'' || c == '【' || c == '】';
     }
   }
 }
