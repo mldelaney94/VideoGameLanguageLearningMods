@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace ShadowrunDragonfallLanguageEngage.Contract
 {
-  public abstract class SRLEPlugin
+  public abstract class SRDFPlugin
   {
     /// <summary>
     /// When you mouse over a word, you are actually mousing over a letter,

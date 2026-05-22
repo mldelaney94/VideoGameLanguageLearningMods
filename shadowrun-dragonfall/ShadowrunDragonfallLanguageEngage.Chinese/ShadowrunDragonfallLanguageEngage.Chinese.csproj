@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
-    <AssemblyName>SRLEPlugin</AssemblyName>
+    <AssemblyName>SRDFPlugin</AssemblyName>
     <RootNamespace>ShadowrunDragonfallLanguageEngage.Chinese</RootNamespace>
     <LangVersion>latest</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

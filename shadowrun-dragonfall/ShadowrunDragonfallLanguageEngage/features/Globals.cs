@@ -4,6 +4,6 @@ namespace ShadowrunDragonfallLanguageEngage
 {
   public static class Globals
   {
-    public static SRLEPlugin plugin;
+    public static SRDFPlugin plugin;
   }
 }
