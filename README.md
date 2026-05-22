@@ -4,10 +4,10 @@ A collection of game mods that add language-learning support. Each mod hooks int
 
 ## Games
 
-| Game | Mod | Preprocessor | Status |
-|------|-----|--------------|--------|
-| [Shadowrun Returns](https://store.steampowered.com/app/234650/Shadowrun_Returns/) | [BepInEx plugin](shadowrun-returns/mod/) | [Python pipeline](shadowrun-returns/preprocessor/) | ✓ Ready for language mods. Chinese plugin only (possible bugs) |
-| [Shadowrun: Dragonfall — Director's Cut](https://store.steampowered.com/app/300550/Shadowrun_Dragonfall__Directors_Cut/) | [BepInEx plugin](shadowrun-dragonfall/ShadowrunDragonfallLanguageEngage/) | [Python pipeline](shadowrun-dragonfall/chinese_preprocessor/) | ✓ Ready for language mods. Chinese plugin only (possible bugs) |
+| Game | Mod | Status |
+|------|-----|--------|
+| [Shadowrun Returns](https://store.steampowered.com/app/234650/Shadowrun_Returns/) | [BepInEx plugin](shadowrun-returns/mod/) | ✓ Ready for language mods. Chinese plugin done |
+| [Shadowrun: Dragonfall — Director's Cut](https://store.steampowered.com/app/300550/Shadowrun_Dragonfall__Directors_Cut/) | [BepInEx plugin](shadowrun-dragonfall/ShadowrunDragonfallLanguageEngage/) | ✓ Ready for language mods. Chinese plugin done |
 
 ## Getting Started
 
