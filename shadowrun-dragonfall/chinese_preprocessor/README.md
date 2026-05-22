@@ -6,7 +6,7 @@ A tool for manipulating the Chinese translations of *Shadowrun Returns* for lang
 
 ## What the script does
 
-- Reads `materials/translations/zh_deadmanswitch_original.po`.
+- Reads `materials/translations/berlin_original.mo`.
 - Uses `pinyiniser` (and its dictionary plus special-token handling) to:
   - Extract Chinese text segments.
   - Generate pinyin for those segments, respecting game markup (`{{GM}}`, `{{/CC}}`, etc.) and template variables (`$(l.name)`, `$+(l.honorific)`, etc.).
