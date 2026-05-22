@@ -1,6 +1,6 @@
 # Shadowrun: Dragonfall — Language Engage
 
-BepInEx mod for *Shadowrun: Dragonfall — Director's Cut* with a contract assembly and optional Chinese satellite plugin (`SRLEPlugin.dll`).
+BepInEx mod for *Shadowrun: Dragonfall — Director's Cut* with a contract assembly and optional Chinese satellite plugin (`SRDFPlugin.dll`).
 
 ## Build and install
 
@@ -12,7 +12,7 @@ if ($?) {
   $dest = "C:\Program Files (x86)\Steam\steamapps\common\Shadowrun Dragonfall Director's Cut\BepInEx\plugins\"
   Copy-Item "ShadowrunDragonfallLanguageEngage\bin\Debug\net35\ShadowrunDragonfallLanguageEngage.dll" $dest -Force
   Copy-Item "ShadowrunDragonfallLanguageEngage.Contract\bin\Debug\net35\ShadowrunDragonfallLanguageEngage.Contract.dll" $dest -Force
-  Copy-Item "ShadowrunDragonfallLanguageEngage.Chinese\bin\Debug\net35\SRLEPlugin.dll" $dest -Force
+  Copy-Item "ShadowrunDragonfallLanguageEngage.Chinese\bin\Debug\net35\SRDFPlugin.dll" $dest -Force
 }
 ```
 
