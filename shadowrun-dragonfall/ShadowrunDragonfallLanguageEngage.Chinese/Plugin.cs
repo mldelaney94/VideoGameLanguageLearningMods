@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace ShadowrunDragonfallLanguageEngage.Chinese
 {
-  public class Plugin : SRLEPlugin
+  public class Plugin : SRDFPlugin
   {
     public static Dictionary<string, Dictionary<string, string>> CEDict = [];
     public const string WordHighlightColor = "EFD27B"; // yellow
