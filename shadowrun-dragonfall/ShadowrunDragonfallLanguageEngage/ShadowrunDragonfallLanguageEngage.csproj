@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
     <AssemblyName>ShadowrunDragonfallLanguageEngage</AssemblyName>
-    <Product>Language learning modification for Shadowrun: Dragonfall</Product>
+    <Product>SLDF</Product>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>

@@ -11,9 +11,9 @@ dotnet build ShadowrunDragonfallLanguageEngage\ShadowrunDragonfallLanguageEngage
 if ($?) {
   $dest = "C:\Program Files (x86)\Steam\steamapps\common\Shadowrun Dragonfall Director's Cut\BepInEx\plugins\"
   Copy-Item "ShadowrunDragonfallLanguageEngage\bin\Debug\net35\ShadowrunDragonfallLanguageEngage.dll" $dest -Force
-  Copy-Item "ShadowrunDragonfallLanguageEngage.Contract\bin\Debug\ShadowrunDragonfallLanguageEngage.Contract.dll" $dest -Force
-  Copy-Item "ShadowrunDragonfallLanguageEngage.Chinese\bin\Debug\SRLEPlugin.dll" $dest -Force
+  Copy-Item "ShadowrunDragonfallLanguageEngage.Contract\bin\Debug\net35\ShadowrunDragonfallLanguageEngage.Contract.dll" $dest -Force
+  Copy-Item "ShadowrunDragonfallLanguageEngage.Chinese\bin\Debug\net35\SRLEPlugin.dll" $dest -Force
 }
 ```
 
-Adjust `$dest` if your Steam library is elsewhere. For the Chinese plugin dictionary popup, also place **`cedict_ts.u8`** in the same `BepInEx/plugins/` folder.
+Adjust `$dest` if your Steam library is elsewhere. The Chinese plugin loads **`cedict_ts.u8`** from `BepInEx/plugins/` at startup (the copy step above uses the bundled `CEDictText.txt`). For a newer dictionary, download from [MDBG CEDICT](https://www.mdbg.net/chinese/dictionary?page=cedict) and replace that file.

@@ -1,6 +1,6 @@
-using ShadowrunReturnsLanguageEngage.Contract;
+using ShadowrunDragonfallLanguageEngage.Contract;
 
-namespace ShadowrunReturnsLanguageEngage
+namespace ShadowrunDragonfallLanguageEngage
 {
   public static class Globals
   {
