@@ -1,5 +1,7 @@
-# Shadowrun Returns Preprocessor
-A tool for manipulating the Chinese translations of *Shadowrun Returns* for language-learning purposes. It converts the original Chinese `.po` file into a `.mo` file that contains both the Chinese text and its pinyin, along with a series of cleanup passes for punctuation, templates, and proper names.
+# Shadowrun Dragonfall Preprocessor
+A tool for manipulating the Chinese community translation of *Shadowrun Dragonfall* for language-learning purposes. It converts the original Chinese `.po` file into a `.mo` file that contains both the Chinese text and its pinyin, along with a series of cleanup passes for punctuation, templates, and proper names.
+
+Special thanks to https://github.com/fmwizard/shadowrun-dragonfall-zh for hosting the Chinese community translation
 
 ![without pinyin picture](img/without_pinyin.png "Without pinyin")
 ![with pinyin picture](img/with_pinyin.png "With pinyin")
@@ -39,7 +41,7 @@ From the project root:
 python main.py
 ```
 
-After it finishes, you should have a `zh_deadmanswitch.mo` file that can be used by the game (or further processed by other gettext tooling).
+After it finishes, you should have a `berlin.mo` and `Dragonfall Extended.mo` file that can be used by the game (or further processed by other gettext tooling).
 
 ## Using gettext tools directly
 
