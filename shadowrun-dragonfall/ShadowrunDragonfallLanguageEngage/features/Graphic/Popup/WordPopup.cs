@@ -29,9 +29,9 @@ namespace ShadowrunDragonfallLanguageEngage
     private const int PopupVerticalOffset = -275;
     private const int PopupRightOffset = -400;
     private const int PopupLeftOffset = 450;
-    private const string BackgroundColor = "060606"; // grey-black
-    private const string BorderColor = "62b6bd"; // light-blue
-    private const string ScrollBarColour = "1DD0DE"; // Light-blue, same as in-game scroll-bar colour
+    private const string BackgroundColor = "0e0f11"; // grey-black
+    private const string BorderColor = "96baba"; // grey-blue
+    private const string ScrollBarColour = "738e8e"; // grey-blue, same as in-game scroll-bar colour
 
     public static void Hide()
     {
