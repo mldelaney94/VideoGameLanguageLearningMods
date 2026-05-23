@@ -49,6 +49,7 @@ PUNCTUATION_REPLACEMENTS = dict[str, str](sorted({
   "     ": " ",
   "    ": " ",
   "   ": " ",
+  " / ": "/",
 }.items(), key=lambda kv: len(kv[0]), reverse=True))
 
 # Template variable fixes: spaced-out game variables back to correct form
@@ -84,6 +85,13 @@ TEMPLATE_TOKENS = {
   "$+(l.hisher)",
   "$+(s.he)",
   "$+(s.hisher)",
+  # $++(l.*) / $++(L.*)
+  "$++(l.name)",
+  "$++(l.race)",
+  "$++(l.man)",
+  "$++(L.NAME)",
+  "$++(L.RACE)",
+  "$++(L.HIM)",
   # $(global.*)
   "$(global.cheats_used)",
   "$(global.dmg_rcv)",
@@ -275,6 +283,54 @@ PROPER_NAME_REPLACEMENTS = dict(sorted({
 }.items(), key=lambda kv: len(kv[0]), reverse=True))
 
 MISC_REPLACEMENTS = dict(sorted({
+  # Email / URLs — 1 hit each
+  "support @ hbs -studios . com": "support@hbs-studios.com",
+  "harebrained -schemes . com": "harebrained-schemes.com",
+  "twitter / webeharebrained": "twitter/webeharebrained",
+  "fb / harebrainedschemes": "fb/harebrainedschemes",
+  # Act names — 4 hits
+  "( Not counted for enemy Scaling )": "(Not counted for enemy Scaling)",
+  # Weapon / model designators
+  "Sai4de2 -ke4lu3bo2": "Sai4de2-ke4lu3bo2",  # 42 hits
+  "SM -3": "SM-3",  # 4 hits
+  "AK -97": "AK-97",  # 2 hits
+  "MA -2100": "MA-2100",  # 3 hits
+  "MGL -6": "MGL-6",  # 2 hits
+  "CTY -360": "CTY-360",  # 2 hits
+  "APEX057 -": "APEX057-",  # 1 hit
+  # Game stat modifiers — 11 hits
+  "jing1 zhun3 du4 -5": "jing1 zhun3 du4-5",
+  "jing1 zhun3 du4 -1": "jing1 zhun3 du4-1",
+  # UI labels with spaced slash — 12 hits
+  "shi1fa3 / zhou4 shu4": "shi1fa3/zhou4shu4",
+  "shi4 / fou3": "shi4/fou3",
+  # Version strings — 8 hits
+  "v . 1 . 11": "v.1.11",
+  "v . 1 . 01": "v.1.01",
+  "v . 2 . 71": "v.2.71",
+  "v . 1 . 1": "v.1.1",
+  # Matrix/VR dates YYYY -MM -DD — 26 hits total
+  " -01 -": "-01-",
+  " -02 -": "-02-",
+  " -03 -": "-03-",
+  " -04 -": "-04-",
+  " -05 -": "-05-",
+  " -06 -": "-06-",
+  " -07 -": "-07-",
+  " -08 -": "-08-",
+  " -09 -": "-09-",
+  " -10 -": "-10-",
+  " -11 -": "-11-",
+  " -12 -": "-12-",
+  # Numbered list steps
+  "1 . ": "1. ",
+  "2 . ": "2. ",
+  "3 . ": "3. ",
+  # Act name double-space after colon — 14 hits
+  ":  ": ": ",
+  # File extensions
+  " . com": ".com",
+  " . exe": ".exe",
   # Newsnet reference: / / xin1wen2wang3 / / → //xin1wen2wang3//
   "/ /": "//",
   "( 0 )": "(0)",
