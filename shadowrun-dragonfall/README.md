@@ -2,6 +2,8 @@
 
 BepInEx mod for *Shadowrun: Dragonfall — Director's Cut* with a contract assembly and optional Chinese satellite plugin (`SRDFPlugin.dll`).
 
+Special thanks to https://github.com/fmwizard/shadowrun-dragonfall-zh for hosting the Chinese community translation used in this plugin
+
 ## Build and install
 
 From `shadowrun-dragonfall/`:
