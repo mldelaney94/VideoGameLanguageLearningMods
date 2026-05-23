@@ -53,32 +53,98 @@ PUNCTUATION_REPLACEMENTS = dict[str, str](sorted({
 
 # Template variable fixes: spaced-out game variables back to correct form
 TEMPLATE_TOKENS = {
+  # $(l.*) / $(s.*)
   "$(l.name)",
   "$(l.Name)",
   "$(l.sir)",
-  "$(s.name)",
-  "$+(l.honorific)",
-  "$+(l.name)",
+  "$(l.Sir)",
   "$(l.man)",
   "$(l.guy)",
+  "$(l.race)",
+  "$(l.Race)",
+  "$(l.he)",
+  "$(l.him)",
+  "$(l.his)",
+  "$(l.hisher)",
+  "$(l.honorific)",
+  "$(l.freund)",
+  "$(s.name)",
+  "$(s.Name)",
   "$(s.man)",
   "$(s.guy)",
-  "$(l.Race)",
-  "$(l.Sir)",
+  "$(s.he)",
+  "$(s.him)",
+  "$(s.hisher)",
+  "$(s.race)",
+  # $+(l.*) / $+(s.*)
+  "$+(l.name)",
   "$+(l.guy)",
-  "$(l.race)",
   "$+(l.sir)",
-  "$(l.race_plural)",
-  "$+(l.race_plural)",
-  "$(l.him)",
-  "$(l.he)",
-  "$(l.his)",
   "$+(l.he)",
-  "$(l.sex)",
-  "$(s.Name)",
-  "$(scene.BroSis)",
-  "$(scene.FatherMother)",
-  "$(scene.TalkAbout)",
+  "$+(l.hisher)",
+  "$+(s.he)",
+  "$+(s.hisher)",
+  # $(global.*)
+  "$(global.cheats_used)",
+  "$(global.dmg_rcv)",
+  "$(global.dmg_snd)",
+  "$(global.elapsed_time)",
+  "$(global.good_combat_time)",
+  "$(global.good_friendly_time)",
+  "$(global.heal_item)",
+  "$(global.kills)",
+  "$(global.mission_complete)",
+  # $(player.*)
+  "$(player.deaths)",
+  "$(player.dmg_snd)",
+  "$(player.kills)",
+  # $(team.*)
+  "$(team.cheats_used)",
+  "$(team.good_combat_time)",
+  "$(team.good_friendly_time)",
+  "$(team.kills)",
+  # $(scene.*)
+  "$(scene.ActiveGasArea)",
+  "$(scene.apocalyptic)",
+  "$(scene.badfantasy)",
+  "$(scene.CafeSpecial)",
+  "$(scene.countBombsRemaining)",
+  "$(scene.countPoisonClock)",
+  "$(scene.CountRoundsBomb)",
+  "$(scene.cyberpunk)",
+  "$(scene.fantasy)",
+  "$(scene.himher)",
+  "$(scene.iBountyToCollect)",
+  "$(scene.iNumCCCFound)",
+  "$(scene.iNumMagnifikerToSell)",
+  "$(scene.numUnreadMessages)",
+  "$(scene.numWaterPumpsActive)",
+  "$(scene.postapocalyptic)",
+  "$(scene.RoundsLeft)",
+  "$(scene.sciencefiction)",
+  "$(scene.sFakeName)",
+  "$(scene.space)",
+  "$(scene.steampunk)",
+  "$(scene.str_MeOrUs)",
+  "$(scene.str_RedOrGreen)",
+  "$(scene.superhero)",
+  "$(scene.western)",
+  # $(story.*)
+  "$(story.a3_Endgame_s4_LoadingScreen)",
+  "$(story.date_Aztechnology)",
+  "$(story.date_Chemie)",
+  "$(story.date_Humanis)",
+  "$(story.date_Sewer)",
+  "$(story.date_Trust_Blitz)",
+  "$(story.date_Trust_Eiger)",
+  "$(story.Global_AliceFunds)",
+  "$(story.Global_HavenLoadingScreen)",
+  "$(story.Global_Skillcheck_Easy)",
+  "$(story.Global_Skillcheck_Hard)",
+  "$(story.Global_Skillcheck_Medium)",
+  "$(story.Haven_Global_SamuelDonations)",
+  "$(story.Haven_Global_SamuelGoal)",
+  "$(story.Hub_countTranspondersPlaced)",
 }
 
 # Markup tag fixes: spaced-out game markup tags back to correct form
@@ -93,115 +159,127 @@ MARKUP_TOKENS = {
 # NOTE: names the pinyiniser already squishes (Pa4ke1, Ji2nuo4, De2li4la1, etc.)
 # are omitted — only SPACED forms that actually appear in output are listed.
 PROPER_NAME_REPLACEMENTS = dict(sorted({
-  # Coyote — 152 hits, two transliteration variants
-  "kai3 yao1 di1": "Kai3yao1di1",
-  "kai3 ao4 te4": "Kai3ao4te4",
-  "kai3 yao1 ti2": "Kai3yao1ti2",
-  # Telestrian — 146 hits, two transliteration variants
-  "te4 li3 si1 tan3": "Te4li3si1tan3",
-  "cui1 si1 tan3": "Cui1si1tan3",
-  # Watts — 99 hits
-  "hua2 ci2": "Hua2ci2",
-  # Lynne — 60 hits
-  "lin2 en1": "Lin2en1",
-  # Kubota — 55 hits
-  "ku4 bo1 ta3": "Ku4bo1ta3",
-  # Baron — 42 hits
-  "ba1 long2": "Ba1long2",
-  # McKlusky — two transliteration variants
-  "mai4ke4 lan2si1 ji1": "Mai4ke4lan2si1ji1",
-  "mai4 ku4 lu2 si1 ji1": "Mai4ku4lu2si1ji1",
-  # Johnny — 32 hits
-  "qiang2 ni2": "Qiang2ni2",
-  # Cherry — 19 hits
-  "qie1 li4": "Qie1li4",
-  # Aljernon — 19 hits
-  "a1 er3 jie2 nong2": "A1'er3jie2nong2",
-  # Dowd — 18 hits
-  "duo1 de2": "Duo1de2",
-  # Castle — 15 hits
-  "ka3 suo3er3": "Ka3suo3er3",
-  # Melinda — 14 hits
-  "mei2 lin2 da2": "Mei2lin2da2",
-  # Erik — 11 hits
-  "ai1 li3 ke4": "Ai1li3ke4",
-  # Silas — 11 hits
-  "xi1 la1 si1": "Xi1la1si1",
-  # Harlequin — two transliteration variants
-  "ha1li4 kui2 yin1": "Ha1li4kui2yin1",
-  "ha1 le4 kun1": "Ha1le4kun1",
-  # Fosberg — 10 hits
-  "fu2 si1 ba4 ge1": "Fu2si1ba4ge1",
-  # Larry — 10 hits
-  "niu3 La1rui4": "Niu3la1rui4",
-  # Cherry Bomb — 9 hits
-  "pang2 bo1": "Pang2bo1",
-  # Buster — 8 hits
-  "ba4 si1 te4": "Ba4si1te4",
-  # Shannon — two transliteration variants
-  "xiang1 nong2": "Xiang1nong2",
-  "xia4 nong2": "Xia4nong2",
-  # Valerie — 7 hits
-  "wa3 lai2 li2": "Wa3lai2li2",
-  # Jamal — 7 hits
-  "jia3 ma3 er3": "Jia3ma3er3",
-  # Maury — 6 hits
-  "mao2 rui4": "Mao2rui4",
-  # Vlad — 5 hits
-  "fu2 la1 de2": "Fu2la1de2",
-  # O'Malley — 5 hits
-  "ao4 mai4 li4": "Ao4mai4li4",
-  # Portland — 5 hits
-  "bo1 te4 lan2": "Bo1te4lan2",
-  # Armitage — 4 hits
-  "a1 mi3 di4 ji1": "A1mi3di4ji1",
-  # Donny — two transliteration variants
-  "tang2 ni2": "Tang2ni2",
-  "duo1 ni2": "Duo1ni2",
-  # Manny — 3 hits
-  "man4 ni2": "Man4ni2",
-  # Kluwe variant — 3 hits
-  "ke4 lu3 wei1": "Ke4lu3wei1",
-  # Mossman — 2 hits
-  "mo4 si1 man4": "Mo4si1man4",
-  # Wells — 2 hits
-  "wei1 er3 si1": "Wei1er3si1",
-  # Lucy — 1 hit (usually auto-squished)
-  "lu4 xi1": "Lu4xi1",
-  # Walden (Lucy's surname) — 1 hit
-  "wo4 deng1": "Wo4deng1",
-  # Halfsky (Shannon's surname) — 1 hit
-  "ha1 fu1 si1 ji1": "Ha1fu1si1ji1",
-  # David — 1 hit (usually auto-squished)
-  "da4 wei4": "Da4wei4",
-  # Alexis — 1 hit
-  "a1 li4 ke4 si1": "A1li4ke4si1",
-  # Monica's surname — 1 hit
-  "sa4 qie1 nuo4 fu1": "Sa4qie1nuo4fu1",
-  # Holmes surname — 1 hit
-  "huo4 ling2 si1": "Huo4ling2si1",
-  # Forsberg surname
-  "fu2 si1 bai3 ge2": "Fu2si1bai3ge2",
-  # Paco
-  "pa4 ke1": "Pa4ke1",
-  # Gino
-  "ji2 nuo4": "Ji2nuo4",
-  # Jessica
-  "jie2 xi1 ka3": "Jie2xi1ka3",
-  # Jake
-  "jie2ke4": "Jie2ke4",
-  # Aguirre
-  "a1 ji2 lei2": "A1ji2lei2",
+  # Dragonfall Extended / Berlin
+  # Vauclair — 102 hits
+  "wo4 ke4lai2er3": "Wo4ke4lai2er3",
+  # Adrian Vauclair — 51 hits
+  "e1 de2 li3 an1": "E1de2li3an1",
+  # Glory — 100+ hits
+  "ge2 luo4 li2": "Ge2luo4li2",
+  # Dietrich — 100+ hits
+  "di2 te4 li3 xi1": "Di2te4li3xi1",
+  # Eiger — 100+ hits
+  "ai4 ge2 er3": "Ai4ge2er3",
+  # Monika — 103 hits
+  "mo4 ni1 ka3": "Mo4ni1ka3",
+  # Monika's shadow — 39 hits
+  "mo4 ni1 ka3 de5 ying3xiang4": "Mo4ni1ka3de5ying3xiang4",
+  # Marta — 100+ hits
+  "ma3 er3 ta3": "Ma3er3ta3",
+  # Audran — 100+ hits
+  "ao4 de2 lan2": "Ao4de2lan2",
+  # Blitz — 100+ hits
+  "bu4 li3 ci2": "Bu4li3ci2",
+  # Harrow — 39 hits
+  "xie1 hai2": "Xie1hai2",
+  # Herr Schmidt — 46 hits
+  "te4 xian1": "Te4xian1",
+  # Goldschmidt — 12 hits
+  "ge1 de2 shi1": "Ge1de2shi1",
+  # Zaak — 53 hits
+  "zha1 ke4": "Zha1ke4",
+  # Green Winters — 102 hits
+  "wen1 te4 si1": "Wen1te4si1",
+  # Ezkibel — 52 hits
+  "ai1 zi1 ji1 bei4": "Ai1ziji1bei4",
+  # Yuli — 47 hits
+  "you2 li3": "You2li3",
+  # Beckenbauer — 20 hits
+  "bei4 ken3 bao4 er3": "Bei4ken3bao4er3",
+  # Volker Stahl — 50 hits (surname)
+  "si1 ta3 er3": "Si1ta3er3",
+  # Volker Stahl — 15 hits (given name)
+  "wo4 er3 ke4": "Wo4er3ke4",
+  # Lucky Strike — 7 hits
+  "xing4 yun4 xing1": "Xing4yun4xing1",
+  # Kreuzbasar — 100+ hits
+  "ke4 luo4 yi1 ci2 ji2": "Ke4luo4yi1ci2ji2",
+  # Kreuzbasar (short) — 101 hits
+  "ke4 luo4 yi1": "Ke4luo4yi1",
+  # Feuerschwinge — 100+ hits
+  "huo3 yi4": "Huo3yi4",
+  # Lofwyr — 37 hits
+  "luo4 fu1 wei2 er3": "Luo4fu1wei2er3",
+  # Nebelherr — 3 hits (partial squish)
+  "nei4 bai3 er3 he4er3": "Nei4bai3er3he4er3",
+  # Kaltenstein — 2 hits (partial squish)
+  "ka3er3 teng2 shi1 tan3": "Ka3er3teng2shi1tan3",
+  # Harz — 7 hits
+  "ha1 er3 ci2": "Ha1er3ci2",
+  # Knight Errant — 96 hits
+  "xia2 qi2": "Xia2qi2",
+  # Aztechnology — 102 hits
+  "e1 zi1 te4 ke1": "E1zi1te4ke1",
+  # Schockwellenreiter — 40 hits
+  "bo1 qi2": "Bo1qi2",
+  # Falkenrath — 2 hits
+  "fa3 ken3 la1 si1": "Fa3ken3la1si1",
+  # Saeder-Krupp — 42 hits
+  "sai4 de2": "Sai4de2",
+  # Rabengeister — 31 hits
+  "ya1 ling2": "Ya1ling2",
+  # Shadowrunner — 93 hits
+  "ying3 kuang2": "Ying3kuang2",
+  # Shadowrunner — 101 hits (alt transliteration)
+  "ben1 zhe3": "Ben1zhe3",
+  # APEX — 15 hits
+  "yu4 xi4": "Yu4xi4",
+  # Diehl Defense — 9 hits
+  "di2 er3 fang2wu4": "Di2er3fang2wu4",
+  # Amsel — 100 hits
+  "e1 mu3 ze2 er3": "E1mu3ze2er3",
+  # Hasenkamp — 79 hits
+  "ha1 sen1 kan3 pu3": "Ha1sen1kan3pu3",
+  # Plotz — 46 hits
+  "pu3 luo4 ci2": "Pu3luo4ci2",
+  # Harfeld Manor — 43 hits
+  "ha1 fei1 er3 de2 zhuang1": "Ha1fei1er3de2zhuang1",
+  # Harfeld — 46 hits
+  "ha1 fei1 er3 de2": "Ha1fei1er3de2",
+  # Aljernon (alt transliteration) — 43 hits
+  "e1 er3 jie2 nong2": "E1er3jie2nong2",
+  # Jana — 42 hits
+  "jian3 na4": "Jian3na4",
+  # SOX — 41 hits
+  "sa4 luo4 lu2": "Sa4luo4lu2",
+  # Silke — 31 hits
+  "xi1 er3 ke4": "Xi1er3ke4",
+  # Enstad — 31 hits
+  "shi1 ta3 de2": "Shi1ta3de2",
+  # Herr Fuchs — 27 hits
+  "fu4 ke4 si1": "Fu4ke4si1",
+  # Heimer — 21 hits
+  "hai3 mo4": "Hai3mo4",
+  # Kami — 20 hits
+  "ka3 mi3": "Ka3mi3",
+  # Ruby — 19 hits
+  "lou4 bi3": "Lou4bi3",
+  # Titonius Rex — 17 hits
+  "tai4 tuo1 ni2 wu1 si1": "Tai4tuo1ni2wu1si1",
+  # Das Kesselhaus — 15 hits
+  "guo1 lu2 fang2": "Guo1lu2fang2",
+  # Xolotl — 8 hits
+  "xiu1 luo4 te4 er3": "Xiu1luo4te4er3",
+  # Rabengeister (alt) — 6 hits
+  "ya1 shen2": "Ya1shen2",
 }.items(), key=lambda kv: len(kv[0]), reverse=True))
 
 MISC_REPLACEMENTS = dict(sorted({
-  # Spaced-out email
-  "  E . Silverstar @ telestrian . ucas  ": "E.Silverstar@telestrian.ucas",
-  # Aegis model number (runs after general space collapsing)
-  "Mk . 1": "Mk.1",
   # Newsnet reference: / / xin1wen2wang3 / / → //xin1wen2wang3//
   "/ /": "//",
-  "( 1 )": "(1)",
+  "( 0 )": "(0)",
+  "{ 0 }": "{0}",
+  " 、 ": "、",
 }.items(), key=lambda kv: len(kv[0]), reverse=True))
 
 def main():
@@ -215,6 +293,8 @@ def main():
 
   berlin = add_pinyin(berlin_po, d, SPECIAL_TOKENS, REPLACEMENTS)
   dragonfall_extended = add_pinyin(dragonfall_extended_po, d, SPECIAL_TOKENS, REPLACEMENTS)
+  berlin.save()
+  dragonfall_extended.save()
 
   berlin.save_as_mofile('berlin.mo')
   dragonfall_extended.save_as_mofile('Dragonfall Extended.mo')
