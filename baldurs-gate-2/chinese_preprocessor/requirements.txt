@@ -1,1 +1,1 @@
-pinyiniser
+pinyiniser==2.0.3
