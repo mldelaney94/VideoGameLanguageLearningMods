@@ -41,8 +41,8 @@ def main(lang, encoding):
 
   tlk = read_tlk('materials/translations/dialog_zh.tlk')
 
-  tlk.map_strings(
+  tlk.map_strings(add_pinyin)
 
-  )
+  save_tlk('dialog_with_pinyin')
 
   return None
