@@ -1,0 +1,24 @@
+import pinyiniser as pyer
+
+do_not_parse = {'CHARNAME', 'BROTHERSISTER', 'DAYANDMONTH',
+        'DAYNIGHT', 'DAYNIGHTALL', 'GABBER', 'GAMEDAY', 'GAMEDAYS',
+        'GIRLBOY', 'HESHE', 'HIMHER', 'HISHER', 'LADYLORD', 'LEVEL',
+        'MALEFEMALE', 'MANWOMAN', 'MONTH', 'MONTHNAME', 'DAY', 'PLAYER1-6',
+        'PRO_BROTHERSISTER', 'PRO_CLASS', 'PRO_GIRLBOY', 'PRO_HESHE',
+        'PRO_HIMHER', 'PRO_HISHER', 'PRO_LADYLORD', 'PRO_MALEFEMALE',
+        'PRO_MANWOMAN', 'PRO_MASTERMISTRESS', 'PRO_RACE', 'PRO_SIRMAAM'
+        'PRO_SONDAUGHTER', 'RACE', 'SIRMAAM', 'SONDAUGHTER', 'TM', 'YEAR',
+        'SPELLLEVEL', 'WEAPONNAME', 'SPECIALABILITYNAME', 'ITEMCOST',
+        'ITEMNAME', 'DURATION', 'HOUR' , 'PRO', 'PLAYER1', 'PLAYER2',
+        'PLAYER3', 'PLAYER4', 'PLAYER5', 'PLAYER6', 'DAMAGER', 'DAMAGEE',
+        'AMOUNT', 'TYPE', 'FIGHTERTYPE', 'MAGESCHOOL', 'RESISTED',
+        'SERVERVERSION', 'CLIENTVERSION', 'MINIMUM', 'MAXIMUM', 'script',
+        'CLASS', 'CurrentChapter', 'HP', 'EXPERIENCE', 'NEXTLEVEL',
+        'number', 'DURATIONNOAND', 'DOTS1', 'DOTS2', 'DOTS3', 'DOTS4',
+        'DOTS5', 'EXPERIENCEAMOUNT', 'TARGET', 'CREATURE', 'LEVELDIF',
+        'losing', 'battle', 'RESOURCE', 'PRO_HEHER', 'AREA_NAME',
+        'MISSING_CONTENT', 'PERCENT', 'COMPLETE', 'TIME', 'REMAINING'}
+
+do_not_parse = do_not_parse.union(pyer.do_not_parse_set)
+
+def main(lang, encoding):
