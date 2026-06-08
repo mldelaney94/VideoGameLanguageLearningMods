@@ -71,7 +71,7 @@ def mapper(string: str) -> str:
 
 def add_pinyin(string: str, d):
   chinese, pinyin = pyer.get_segments_and_pinyin(string, d, SPECIAL_TOKENS)
-  chinese = '\u200B'.join(chinese)
+  chinese = '\uE'.join(chinese)
   pinyin = ' '.join(pinyin)
   if (chinese.count('\n') > 1):
     string = chinese + '\n\n' + pinyin
@@ -91,7 +91,7 @@ def main(lang, encoding):
     if '<MISSING_CONTENT>' in rep.str_string:
       print(rep.str_string)
 
-  mapped_tlk.save_tlk('dialog_with_pinyin')
+  mapped_tlk.save_tlk('dialog_with_pinyin_and_BOM')
 
   return None
 
