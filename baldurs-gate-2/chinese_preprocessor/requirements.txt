@@ -1,2 +1,2 @@
-pinyiniser==2.0.3
+pinyiniser==2.0.4
 tlk-parser==1.0.0
